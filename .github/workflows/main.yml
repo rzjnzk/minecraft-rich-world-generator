@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - development
-        - 
+        -
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,5 +16,6 @@ jobs:
         java-version: 8
     - name: Run repo scripts
       run: |
-        ./configure
-        ./build.sh
+        ./configure || printf -- "Error configuring."
+        ./build.sh || printf -- "Error building."
+        printf -- "Done."
