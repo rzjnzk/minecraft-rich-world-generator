@@ -16,7 +16,9 @@ jobs:
         java-version: 8
     - name: Run repo scripts
       run: |
-        printf -- "Executing \`./configure\`"
+        tree
+        printf -- "Executing \`./configure\n"
         sh ./configure
-        printf -- "Executing \`./build.sh\`"
+        printf -- "Executing \`./build.sh\`\n"
         sh ./build.sh
+        tree
