@@ -1,0 +1,7 @@
+name: RichWorldGenerator
+author: rjznzk@gmail.com
+main: me.rzjnzk.richworldgenerator.RichWorldGenerator
+version: 0.0.1
+commands:
+    hello:
+        description: 'test'

@@ -1,1 +1,27 @@
-git config commit.template .gitmessage
+#!/bin/sh
+
+(
+
+_main()
+{
+    git config commit.template .gitmessage
+
+    mkdir -p \
+        ./build/libs \
+        ./build/classes \
+        ./bin
+
+    test -f ./build/libs/spigot-api-1.15.2-R0.1-20200208.235302-49.jar || \
+        curl https://hub.spigotmc.org/nexus/content/repositories/snapshots/org/spigotmc/spigot-api/1.15.2-R0.1-SNAPSHOT/spigot-api-1.15.2-R0.1-20200208.235302-49.jar \
+        -o ./build/libs/spigot-api-1.15.2-R0.1-20200208.235302-49.jar
+}
+
+set -e
+_script_name="$(basename "${0}")"
+_script_path="$(dirname "${0}")"
+_script_path="$(cd "${_script_path}" ; pwd)"
+_script_args="$(printf -- "%s\n" "${@}")"
+mkdir "${_script_path}/${_script_name}-logs"
+_main "${@}" | tee --append -- "${_script_path}/${_script_name}-logs/$(date --utc +%Y-%m-%d_%H-%M-%S).log"
+
+)
