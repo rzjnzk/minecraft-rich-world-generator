@@ -1,7 +1,10 @@
 name: RichWorldGenerator
+description: A realistic world generator.
 author: rjznzk@gmail.com
+website: https://github.com/rzjnzk/minecraft-rich-world-generator
 main: me.rzjnzk.richworldgenerator.RichWorldGenerator
 version: 0.0.1
+load: STARTUP
 commands:
     hello:
         description: 'test'

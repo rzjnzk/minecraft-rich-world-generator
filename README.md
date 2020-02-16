@@ -6,7 +6,11 @@
     </a>
 </div>
 <div align="left">
-    <a href="https://travis-ci.org/{{gpas}{repo-owner-username}}/{gpas}{repo-name}}">
-        <img alt="Travis Status" src="https://img.shields.io/travis/{{gpas}{repo-owner-username}}/{{gpas}{repo-name}}/master.svg?style=flat-square"/>
-    </a>
+    ![CI](https://github.com/rzjnzk/minecraft-rich-world-generator/workflows/CI/badge.svg?branch=development)1
 </div>
+
+## Reference resources
+
+- https://bukkit.org/threads/how-to-create-custom-world-generators.79066/
+- https://bukkit.gamepedia.com/Plugin_YAML
+- https://bukkit.gamepedia.com/Bukkit.yml

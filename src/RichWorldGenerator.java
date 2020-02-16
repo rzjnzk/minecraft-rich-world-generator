@@ -1,10 +1,15 @@
 package me.rzjnzk.richworldgenerator;
 
+// Dependencies.
 import java.util.logging.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.generator.ChunkGenerator;
+
+// Project.
+import me.rzjnzk.richworldgenerator.Generator;
 
 public class RichWorldGenerator extends JavaPlugin
 {
@@ -34,5 +39,10 @@ public class RichWorldGenerator extends JavaPlugin
         }
 
         return false;
+    }
+
+    public ChunkGenerator getDefaultWorldGenerator(String worldName, String id)
+    {
+        return new Generator();
     }
 }
