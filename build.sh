@@ -34,7 +34,7 @@ _main()
     cd "../../"
 
     printf -- "Running spigot server for manual testing.\n"
-    printf -- "Enter issue the \`stop\` command in the server CLI when manual testing is complete.\n"
+    printf -- "Issue the \`stop\` command in the server CLI when manual testing is complete.\n"
     cd ./bin
     java -jar ./spigot*.jar --nogui
 }

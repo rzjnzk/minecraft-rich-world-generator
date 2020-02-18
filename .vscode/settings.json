@@ -13,5 +13,9 @@
         "java.jdt.ls.vmargs": "-Dfile.encoding=UTF-8",
         "javac-linter.javac": "javac -Dfile.encoding=UTF-8"
     },
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "[yaml]":
+    {
+        "editor.tabSize": 4
+    }
 }

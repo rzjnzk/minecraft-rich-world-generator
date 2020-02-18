@@ -17,18 +17,18 @@ _main()
     test -f ./build/libs/spigot-api-1.15.2-R0.1-20200208.235302-49.jar ||
         curl https://hub.spigotmc.org/nexus/content/repositories/snapshots/org/spigotmc/spigot-api/1.15.2-R0.1-SNAPSHOT/spigot-api-1.15.2-R0.1-20200208.235302-49.jar \
         -o ./build/libs/spigot-api-1.15.2-R0.1-20200208.235302-49.jar &&
-        printf -- "Spigot API jar installed.\n"
-
-    test -f ./build/spigot-buildtools/BuildTools.jar ||
-        curl https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar \
-        -o ./build/spigot-buildtools/BuildTools.jar &&
-        printf -- "Spigot \`BuildTools.jar\` installed.\n"
+            printf -- "Spigot API jar installed.\n"
 
     if
-        test -f ./bin/spigot*.jar
+        test -f "./bin/spigot"*".jar"
     then
         printf -- "Not commpiling spigot, spigot jar found.\n"
     else
+        test -f ./build/spigot-buildtools/BuildTools.jar ||
+        curl https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar \
+        -o ./build/spigot-buildtools/BuildTools.jar &&
+            printf -- "Spigot \`BuildTools.jar\` installed.\n"
+
         cd ./build/spigot-buildtools
         java -jar ./BuildTools.jar --compile SPIGOT -o ../../bin
         cd ../../
