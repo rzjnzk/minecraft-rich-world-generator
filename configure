@@ -1,27 +1,105 @@
 #!/bin/sh
-
-(
-
-_main()
-{
-    git config commit.template .gitmessage
-
-    mkdir -p \
-        ./build/libs \
-        ./build/classes \
-        ./bin
-
-    test -f ./build/libs/spigot-api-1.15.2-R0.1-20200208.235302-49.jar || \
-        curl https://hub.spigotmc.org/nexus/content/repositories/snapshots/org/spigotmc/spigot-api/1.15.2-R0.1-SNAPSHOT/spigot-api-1.15.2-R0.1-20200208.235302-49.jar \
-        -o ./build/libs/spigot-api-1.15.2-R0.1-20200208.235302-49.jar
-}
+#
+# NAME
+#     
+#
+# SYNOPSIS
+#     
+#
+# DESCRIPTION
+#     
+#
+# OPTIONS
+#     
+#
+# AUTHOR
+#     Copyright (c) Robert Zack Jaidyn Norris-Karr <rzjnzk@gmail.com> <https://github.com/rzjnzk>
 
 set -e
-_script_name="$(basename "${0}")"
-_script_path="$(dirname "${0}")"
-_script_path="$(cd "${_script_path}" ; pwd)"
-_script_args="$(printf -- "%s\n" "${@}")"
-mkdir "${_script_path}/${_script_name}-logs"
-_main "${@}" | tee --append -- "${_script_path}/${_script_name}-logs/$(date --utc +%Y-%m-%d_%H-%M-%S).log"
 
-)
+# _script_name="$(basename -- "${0}")"
+_script_path="$(dirname -- "${0}")" ; _script_path="$(cd "${_script_path}" ; pwd)"
+_script_args="$(printf -- "%s\n" "${@}")"
+
+# _config_dir="${HOME}/.config/${_script_name}"
+# _cache_dir="${HOME}/.cache/${_script_name}"
+
+# mkdir -pv -- "${_config_dir}"
+# mkdir -pv -- "${_cache_dir}"
+
+# Ouput file leading comments if no arg is given.
+if \
+	test -z "${1}" 
+then
+	# Print help and exit if a help flag was supplied.
+	cat "${_script_path}/${_script_name}" \
+		| sed -n "3,/^ *$/ { s/^# // ; s/^#// ; p }"
+	exit
+fi
+
+# END: Init code.
+
+git config commit.template .gitmessage
+
+if \
+    printf -- "${_script_args}" | grep -q "^--configure\$"
+then
+    cd "${_script_path}" 
+
+    rm -vr ./bin
+    mkdir -v ./bin
+
+    curl https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar \
+            -o ./bin/BuildTools.jar
+
+    cd ./bin
+    java -jar ./BuildTools.jar --rev latest
+    cd ..
+
+    cp -vf ./resources/eula.txt ./bin
+fi
+
+if \
+    printf -- "${_script_args}" | grep -q "^--build\$"
+then
+    cd "${_script_path}" 
+
+    mkdir -pv \
+        ./build/libs \
+        ./build/classes \
+        ./bin \
+        ./resources \
+        ./bin/plugins
+
+    # test -f ./build/libs/spigot-api-1.15.2-R0.1-20200208.235302-49.jar \
+    #     || curl https://hub.spigotmc.org/nexus/content/repositories/snapshots/org/spigotmc/spigot-api/1.15.2-R0.1-SNAPSHOT/spigot-api-1.15.2-R0.1-20200208.235302-49.jar \
+    #         -o ./build/libs/spigot-api-1.15.2-R0.1-20200208.235302-49.jar
+
+    cd bin
+    javac \
+        -d ../build/classes \
+        -cp ./Spigot/Spigot-API/target/spigot-api-1.16.2-R0.1-SNAPSHOT-shaded.jar \
+        ../src/*.java
+        cd ..
+
+    # javac \
+    #     -target 8 \
+    #     -source 8 \
+    #     -d ../build/classes \
+    #     -cp ./Spigot/Spigot-API/target/spigot-api-1.16.2-R0.1-SNAPSHOT-shaded.jar \
+    #     ../src/RichWorldGenerator.java
+
+    rm -v ./bin/plugins/RichWorldGenerator.jar || :
+    jar cfv ./bin/plugins/RichWorldGenerator.jar \
+        -C ./build/classes . \
+        -C ./src plugin.yml
+fi
+
+if \
+    printf -- "${_script_args}" | grep -q "^--run\$"
+then
+    cd "${_script_path}/bin" 
+
+    chmod u+x ./spigot-1.16.2.jar
+    java -jar ./spigot-1.16.2.jar --port 25565 --nogui 
+fi
